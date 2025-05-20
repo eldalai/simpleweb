@@ -2,15 +2,15 @@ import os
 import pyodbc
 from functools import wraps
 
-DB_USER = os.environ.get('DB_USER')
-DB_PASS = os.environ.get('DB_PASS')
-DB_HOST = os.environ.get('DB_HOST')
+DB_AS400_USER = os.environ.get('DB_AS400_USER')
+DB_AS400_PASS = os.environ.get('DB_AS400_PASS')
+DB_AS400_HOST = os.environ.get('DB_AS400_HOST')
 
 
 def connect(username, password):
     conn_str = (
         "DRIVER={IBM i Access ODBC Driver};"
-        f"SYSTEM={DB_HOST};"
+        f"SYSTEM={DB_AS400_HOST};"
         f"UID={username};"
         f"PWD={password};"
     )
@@ -31,7 +31,7 @@ def with_db_connection(func):
         ):
             return func(*args, **kwargs)
 
-        conn = connect(DB_USER, DB_PASS)
+        conn = connect(DB_AS400_USER, DB_AS400_PASS)
         try:
             cursor = conn.cursor()
             result = func(cursor, conn, *args, **kwargs)
